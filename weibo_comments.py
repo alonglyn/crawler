@@ -61,7 +61,6 @@ def next_page(dr):
 
 def run(url,name='default'):
     dr.get(url)
-    
     data = []
     page = 0
     try:
