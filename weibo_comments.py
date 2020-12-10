@@ -7,22 +7,24 @@ import re
 import os
 import time
 import json
+'''
+无UI界面取消下面的注释
+'''
 # chrome_options = webdriver.ChromeOptions()
 # chrome_options.add_argument('--headless')
 # chrome_options.add_argument('--disable-gpu')
 # chrome_options.add_argument('--no-sandbox')
-dr = webdriver.Chrome()
-dr.get('https://weibo.com/login.php#_loginLayer_1604515522042')
 
-def wait_for(driver,by,param,multy=False,duration=5):
+
+def wait_for(dr,by,param,multy=False,duration=5):
     try:
         if multy:
-            ret = WebDriverWait(driver, duration).until(
+            ret = WebDriverWait(dr, duration).until(
                 EC.presence_of_all_elements_located((by, param)),
                 message="{}超时".format(str((by, param)))
             )
         else:
-            ret = WebDriverWait(driver, duration).until(
+            ret = WebDriverWait(dr, duration).until(
                 EC.presence_of_element_located((by, param)),
                 message="{}超时".format(str((by, param)))
             )
@@ -57,9 +59,7 @@ def next_page(dr):
     else:
         return False
     
-
-
-def run(url,name='default'):
+def run(dr, url,name='default'):
     dr.get(url)
     data = []
     page = 0
@@ -89,34 +89,38 @@ def run(url,name='default'):
     finally:
         df = pd.DataFrame(data)
         df.to_excel('{}.xlsx'.format(name))
-urls = [
-    # 'https://weibo.com/1784473157/DuQsX4MiV?type=comment#_rnd1604515371338',
-    # 'https://weibo.com/2286908003/CjNyU67L1?type=comment#_rnd1604514859040',
-    # 'https://www.weibo.com/2286908003/E0W0CFnH9?s=6cm7D0&type=comment#_rnd1605508735837',
-    # 'https://www.weibo.com/2656274875/E0VZulozf?type=comment#_rnd1605508801123',
-    # 'https://weibo.com/2803301701/E0W6beT8B?type=comment#_rnd1605509251601',#
-    # 'https://weibo.com/2656274875/E0W9laMcp?type=comment#_rnd1605509351165',#
-    # 'https://weibo.com/2656274875/E0WPN5Ns1?type=comment#_rnd1605509395853',#
-    # 'https://www.weibo.com/2803301701/E0ZoN2kpX?type=comment#_rnd1605508674420',#
-    "https://weibo.com/2656274875/B1CCKwX8E?type=comment#_rnd1606279789919",
-    "https://weibo.com/2656274875/B7po0CxOP?type=comment#_rnd1606279963786",
-    "https://weibo.com/2656274875/BhF7OtDe7?type=comment#_rnd1606280009740",
-    "https://weibo.com/2803301701/BEfwIDVaj?refer_flag=1001030103_&type=comment#_rnd1606280059797",
-    "https://weibo.com/2656274875/C4exacAxm?type=comment#_rnd1606280098119",
-    "https://weibo.com/2286908003/CjNyU67L1?type=comment#_rnd1606280144578",
-    "https://weibo.com/2803301701/CEsnVDOFi?type=comment#_rnd1606280248151",
-    "https://weibo.com/2656274875/CFWSG1NMH?type=comment#_rnd1606280273952",
-    "https://weibo.com/1974576991/Dq9AebTLZ?type=comment#_rnd1606280332236",
-    "https://weibo.com/2803301701/DtQGMFkOW?type=comment#_rnd1606280368568",
-    "https://weibo.com/2803301701/DufeCgrGL?type=comment#_rnd1606280494006",
-    "https://weibo.com/2286908003/DuHhDki1Q?type=comment",
-    "https://weibo.com/2803301701/DAGeMdztj?type=comment#_rnd1606280561928",
-]
-input('手动登录后点回车')
-dir_name = str(int(time.time()))
-os.mkdir(dir_name)  
-for i, url in enumerate(urls):
-    fime_name = os.path.join(dir_name,'lyt_'+str(i))
-    print('current:', fime_name)
-    run(url,fime_name)
+
+if __name__ == "__main__":
+    urls = [
+        'https://weibo.com/1784473157/DuQsX4MiV?type=comment#_rnd1604515371338',
+        'https://weibo.com/2286908003/CjNyU67L1?type=comment#_rnd1604514859040',
+        'https://www.weibo.com/2286908003/E0W0CFnH9?s=6cm7D0&type=comment#_rnd1605508735837',
+        'https://www.weibo.com/2656274875/E0VZulozf?type=comment#_rnd1605508801123',
+        'https://weibo.com/2803301701/E0W6beT8B?type=comment#_rnd1605509251601',#
+        'https://weibo.com/2656274875/E0W9laMcp?type=comment#_rnd1605509351165',#
+        'https://weibo.com/2656274875/E0WPN5Ns1?type=comment#_rnd1605509395853',#
+        'https://www.weibo.com/2803301701/E0ZoN2kpX?type=comment#_rnd1605508674420',#
+        "https://weibo.com/2656274875/B1CCKwX8E?type=comment#_rnd1606279789919",
+        "https://weibo.com/2656274875/B7po0CxOP?type=comment#_rnd1606279963786",
+        "https://weibo.com/2656274875/BhF7OtDe7?type=comment#_rnd1606280009740",
+        "https://weibo.com/2803301701/BEfwIDVaj?refer_flag=1001030103_&type=comment#_rnd1606280059797",
+        "https://weibo.com/2656274875/C4exacAxm?type=comment#_rnd1606280098119",
+        "https://weibo.com/2286908003/CjNyU67L1?type=comment#_rnd1606280144578",
+        "https://weibo.com/2803301701/CEsnVDOFi?type=comment#_rnd1606280248151",
+        "https://weibo.com/2656274875/CFWSG1NMH?type=comment#_rnd1606280273952",
+        "https://weibo.com/1974576991/Dq9AebTLZ?type=comment#_rnd1606280332236",
+        "https://weibo.com/2803301701/DtQGMFkOW?type=comment#_rnd1606280368568",
+        "https://weibo.com/2803301701/DufeCgrGL?type=comment#_rnd1606280494006",
+        "https://weibo.com/2286908003/DuHhDki1Q?type=comment",
+        "https://weibo.com/2803301701/DAGeMdztj?type=comment#_rnd1606280561928",
+    ]
+    dr = webdriver.Chrome()
+    dr.get('https://weibo.com/login.php#_loginLayer_1604515522042')
+    input('手动登录后点回车')
+    dir_name = str(int(time.time()))
+    os.mkdir(dir_name)  
+    for i, url in enumerate(urls):
+        fime_name = os.path.join(dir_name,'linzhonglong'+str(i))
+        print('current:', fime_name)
+        run(dr,url,fime_name)
 
